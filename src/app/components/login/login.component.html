@@ -1,0 +1,27 @@
+<!-- login.component.html -->
+
+<div class="login-container" *ngIf="activeBtn == 'loginBtn'">
+    <h1 class="login-title">Login</h1>
+    <div class="login-form" [formGroup]="userLoginFormGroup" (ngSubmit)="onLogin()">
+      <form>
+        <div class="form-group">
+          <input type="email" placeholder="Email" formControlName="emailAddress">
+        </div>
+        <div class="form-group">
+          <input [type]="showPassword ? 'password' : 'text'" placeholder="Password" formControlName="password">
+          <i class="fa fa-eye-slash password-eye-icon" aria-hidden="true" (click)="showPassword=!showPassword" *ngIf="!showPassword"></i>
+          <i class="fa fa-eye password-eye-icon" aria-hidden="true" (click)="showPassword=!showPassword" *ngIf="showPassword"></i>
+        </div>
+        <button type="submit" class="loginButton">Login</button>
+        <div class="signup-container">
+          Don't have an account? <span>Signup </span> 
+        </div>
+        <div class="google-login-container">
+          <button type="button">
+            Login With <span>Google</span>
+          </button>
+        </div>
+      </form>
+    </div>
+</div>
+<app-signup *ngIf="activeBtn == 'signupBtn'" (loginClick)="setButtonValue($event)"></app-signup>

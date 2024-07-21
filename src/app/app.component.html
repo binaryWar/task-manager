@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="task-container">
+      <!-- <i class="fa-solid fa-book" aria-hidden="true"></i> -->
+      <img src="assets/img/to-do-list.png" alt="task-list" height="30px" width="30px">
+    </div>
+    <div class="login-wrapper">
+        <ng-container *ngIf="!showLogoutButton">
+            <button type="button" >Login</button>
+            <button type="button">Signup</button>
+        </ng-container>
+        <ng-container *ngIf="showLogoutButton">
+            <button type="button" class="active">Logout</button>
+        </ng-container>
+    </div>
+  </div>
+<router-outlet></router-outlet>
+<app-loader></app-loader>

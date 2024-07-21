@@ -1,0 +1,56 @@
+
+.login-container{
+    width: 30%;
+    margin: 1rem auto;
+    margin-top: 2rem;
+}
+
+.login-container form{
+    padding: 20px 15px;
+    border: 1.5px solid var(--primary-bg-color);
+    box-shadow: 1px 1px 5px var(--primary-bg-color);
+}
+
+.form-group{
+    position: relative;
+}
+.password-eye-icon{
+    position: absolute;
+    top: 12px;
+    right: 10px;
+}
+.form-group input{
+    width: 100%;
+    padding: 12px 4px;
+    margin-bottom: 1rem;
+    outline: none;
+    border: 1px solid #000;
+}
+
+.loginButton{
+    width: 100%;
+    background-color: var(--primary-bg-color);
+    color: #fff;
+    border: none;
+    padding: 10px 0px;
+    font-size: 16px;
+    border: 1px solid transparent;
+}
+.loginButton:hover{
+    background-color: #fff;
+    color: var(--primary-bg-color);
+    border: 1px solid var(--primary-bg-color);
+    /* box-shadow: 1px 1px gainsboro; */
+}
+.signup-container{
+    text-align: center;
+    font-size: 14px;
+    margin-top: 1.5rem;
+
+}
+.signup-container span{
+    color: var(--primary-bg-color);
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 400;
+}

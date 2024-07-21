@@ -1,0 +1,53 @@
+<div class="signup-form">
+    <h1 class="login-title">Signup</h1>
+    <form [formGroup]="userRegistrationForm" (ngSubmit)="onSubmit()">
+        <div class="parentFormSec">
+            <div class="form-control">
+                <input type="text" placeholder="First Name" formControlName="firstName">
+                <div *ngIf="f['firstName'].invalid && (f['firstName'].dirty || f['firstName'].touched)" class="error">
+                    <div *ngIf="f['firstName'].errors?.['required']">First Name is required</div>
+                    <div *ngIf="f['firstName'].errors?.['maxlength']">First Name must be less than 15 characters</div>
+                </div>
+            </div>
+            <div class="form-control">
+                <input type="text" placeholder="Last Name" formControlName="lastName">
+                <div *ngIf="f['lastName'].invalid && (f['lastName'].dirty || f['lastName'].touched)" class="error">
+                    <div *ngIf="f['lastName'].errors?.['required']">Last Name is required</div>
+                    <div *ngIf="f['lastName'].errors?.['maxlength']">Last Name must be less than 15 characters</div>
+                </div>
+            </div>
+            <div class="form-control">
+                <input type="email" placeholder="Email" formControlName="emailAddress">
+                <div *ngIf="f['emailAddress'].invalid && (f['emailAddress'].dirty || f['emailAddress'].touched)" class="error">
+                    <div *ngIf="f['emailAddress'].errors?.['required']">Email is required</div>
+                    <div *ngIf="f['emailAddress'].errors?.['email']">Invalid email format</div>
+                </div>
+            </div>
+            <div class="form-control">
+                <input type="password" placeholder="Password" formControlName="password">
+                <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="error">
+                    <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                    <div *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</div>
+                    <div *ngIf="f['password'].errors?.['maxlength']">Password must be less than 15 characters</div>
+                </div>
+            </div>
+            <div class="form-control">
+                <input type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+                <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || f['confirmPassword'].touched)" class="error">
+                    <div *ngIf="f['confirmPassword'].errors?.['required']">Confirm Password is required</div>
+                    <div *ngIf="userRegistrationForm.errors?.['passwordMismatch']">Password must match</div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="signupBtn">Sign Up</button>
+
+        <div class="account-container">
+            Already have an account?&nbsp;<span (click)="clickOnLogin()">Login</span>
+        </div>
+        <div class="google-login-container">
+            <button type="button">
+              Signup With <span>Google</span>
+            </button>
+          </div>
+    </form>
+</div>
