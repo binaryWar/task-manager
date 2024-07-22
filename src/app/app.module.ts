@@ -10,6 +10,8 @@ import { HttpInterceptorInterceptor } from './services/http-interceptor.intercep
 import { LoaderComponent } from './components/loader/loader.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import {CdkDrag, CdkDropList, DragDropModule} from '@angular/cdk/drag-drop';
+import { AlertService } from './services/alert.service';
+import { AlertBoxComponent } from './components/alertBox.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import {CdkDrag, CdkDropList, DragDropModule} from '@angular/cdk/drag-drop';
     LoginComponent,
     SignupComponent,
     LoaderComponent,
-    TaskListComponent
+    TaskListComponent,
+    AlertBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,8 @@ import {CdkDrag, CdkDropList, DragDropModule} from '@angular/cdk/drag-drop';
     CdkDropList
   ],
   providers: [
-    {provide : HTTP_INTERCEPTORS, useClass : HttpInterceptorInterceptor, multi:true}
+    {provide : HTTP_INTERCEPTORS, useClass : HttpInterceptorInterceptor, multi:true},
+    AlertService
   ],
   bootstrap: [AppComponent]
 })

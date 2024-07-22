@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class SignupComponent {
   userRegistrationForm!:FormGroup;
 
-  constructor(private formBuilder : FormBuilder,private commonService : CommonService,private router : Router){
+  constructor(private formBuilder : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService){
     this.createForm();
   }
 
@@ -43,10 +44,10 @@ export class SignupComponent {
   onSubmit(){
     if(this.userRegistrationForm.invalid){
       if(this.userRegistrationForm.errors?.['passwordMismatch']){
-        alert("Password and confirm password is not matching")
+        this.alertService.show("Password and confirm password is not matching")
         return;
       }
-      alert("Fill all mandatory fields to continue");
+      this.alertService.show("Fill all mandatory fields to continue");
       return;
     }
     const {firstName,lastName,emailAddress,password } = this.userRegistrationForm.value;
@@ -58,11 +59,11 @@ export class SignupComponent {
     }
     this.commonService.registerUser(payload).subscribe({
       next : (response : any)=>{
-        alert(response.message);
+        this.alertService.show(response.message);
         this.saveCredentials(response);
         this.router.navigate(['/tasks']);
       },error : (err:any)=>{
-        alert("some thing went wrong");
+        this.alertService.show(err?.error?.message || "some thing went wrong");
       }
     })
   }

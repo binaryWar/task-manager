@@ -1,6 +1,8 @@
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject, debounceTime, switchMap } from 'rxjs';
+import { AlertService } from 'src/app/services/alert.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -14,7 +16,8 @@ export class TaskListComponent implements OnInit {
   taskFormGroup!: FormGroup;
   activeTask: any;
   sortOrder: "recent" | "oldest" = "recent";
-
+  private searchSubject: Subject<string> = new Subject<string>();
+  
   row: number = -1;
 
   col: number = -1;
@@ -34,7 +37,7 @@ export class TaskListComponent implements OnInit {
     }
 
   ]
-  constructor(private fb: FormBuilder, private commonService: CommonService) { };
+  constructor(private fb: FormBuilder, private commonService: CommonService,private alertService : AlertService) { };
 
   ngOnInit(): void {
     this.taskFormGroup = this.fb.group({
@@ -42,6 +45,19 @@ export class TaskListComponent implements OnInit {
       description: [, Validators.required]
     });
     this.fetchTask();
+
+    this.searchSubject.pipe(
+      debounceTime(300), // Adjust the debounce time as needed
+      switchMap(value => this.commonService.fetchTask(this.sortOrder, value))
+    ).subscribe({
+      next: (response: any) => {
+        this.groupByStatus(response.tasks || []);
+      },
+      error: (err: any) => {
+        this.alertService.show(err.error.message || "Error in finding the tasks");
+      }
+    });
+
   }
   get f() { return this.taskFormGroup.controls; }
 
@@ -99,7 +115,7 @@ export class TaskListComponent implements OnInit {
   saveTaskDetails() {
 
     if (this.taskFormGroup.invalid) {
-      alert("Fill all the Mandatory details");
+      this.alertService.show("Fill all the Mandatory details");
       return;
     }
 
@@ -120,9 +136,9 @@ export class TaskListComponent implements OnInit {
       next: (response: any) => {
         this.addModalOpen = false;
         this.taskFormGroup.reset();
-        alert(response.message || "Task Created");
+        this.alertService.show(response.message || "Task Created");
       }, error: (err: any) => {
-        alert(err.message || "Something went wrong");
+        this.alertService.show(err.error.message || "Something went wrong");
       }
     })
   }
@@ -146,7 +162,7 @@ export class TaskListComponent implements OnInit {
         this.row = -1;
         this.col = -1;
       }, error: (err: any) => {
-        alert("Some thing went wrong");
+        this.alertService.show(err.error?.message || "Some thing went wrong");
       }
     })
   }
@@ -155,27 +171,33 @@ export class TaskListComponent implements OnInit {
     this.commonService.deleteTask(x._id).subscribe({
       next: (response: any) => {
         this.taskList[i].tasks.splice(j, 1);
-        alert("Delete SuccessFully");
+        this.alertService.show("Delete SuccessFully");
       }, error: (err: any) => {
-        alert("Some thing went wrong");
+        this.alertService.show(err.error?.message || "Some thing went wrong");
       }
     })
   }
 
   onSearch($event: any) {
 
-    const flag = $event.target && $event.target.value.length > 3;
-    if (flag) {
-      const value = $event.target.value;
-      this.commonService.fetchTask(this.sortOrder, value).subscribe({
-        next: (response: any) => {
-          // console.log();
-          this.groupByStatus(response.tasks || []);
-        }, error: (err: any) => {
-          alert("Error is finding the tasks");
-        }
-      })
-    }else if($event.target && $event.target.value.length === 0){
+    // const flag = $event.target && $event.target.value.length > 3;
+    // if (flag) {
+    //   const value = $event.target.value;
+    //   this.commonService.fetchTask(this.sortOrder, value).subscribe({
+    //     next: (response: any) => {
+    //       // console.log();
+    //       this.groupByStatus(response.tasks || []);
+    //     }, error: (err: any) => {
+    //       alert("Error is finding the tasks");
+    //     }
+    //   })
+    // }else if($event.target && $event.target.value.length === 0){
+    //   this.fetchTask();
+    // }
+    const value = $event.target?.value;
+    if (value.length > 3) {
+      this.searchSubject.next(value);
+    } else if (value.length === 0) {
       this.fetchTask();
     }
   }

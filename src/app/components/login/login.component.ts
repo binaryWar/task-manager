@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
+import { AlertBoxComponent } from '../alertBox.component';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit{
   showPassword : boolean = true;
   userLoginFormGroup!:FormGroup;
   
-  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router){}
+  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService){}
 
   ngOnInit(): void {
       this.userLoginFormGroup = this.fb.group({
@@ -23,8 +25,9 @@ export class LoginComponent implements OnInit{
   }
 
   onLogin(){
+
     if(this.userLoginFormGroup.invalid){
-      alert("Fill the details");
+      this.alertService.show("Fill Email and password to continue");
       return;
     }
     this.commonService.login(this.userLoginFormGroup.value).subscribe({
@@ -33,7 +36,7 @@ export class LoginComponent implements OnInit{
         this.handleSessionStorage(id,emailAddress);
         this.router.navigateByUrl('/tasks');
       },error : (err:any)=>{
-        alert("Invalid credentials");
+        this.alertService.show(err.error.message || "Something went wrong");
       }
     })
   }
