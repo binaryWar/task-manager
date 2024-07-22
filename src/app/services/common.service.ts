@@ -12,13 +12,6 @@ export class CommonService {
   private static HOST = environment.API_ENDPOINT;
   constructor(private httpClient : HttpClient) { }
   
-  setLoggedInUserId(userId: string) {
-    this.loggedInUserId = userId;
-  }
-
-  getLoggedInUserId(): string | undefined {
-    return this.loggedInUserId;
-  }
   setLoggedInUserEmailAddress(email : string){
     this.emailAddress = email;
   }
@@ -34,20 +27,14 @@ export class CommonService {
     return this.httpClient.post(`${CommonService.HOST}/user/login`,payload);
   } 
   
-  createIncident(payload : any){
-    return this.httpClient.post(`${CommonService.HOST}/incident/create`,payload);
+  createTask(payload : {title:string,description:string}){
+    return this.httpClient.post(`${CommonService.HOST}/task/create`,payload);
   }
-  fetchUserIncidents(){
-    return this.httpClient.get(`${CommonService.HOST}/incident/fetch`);
+
+  fetchTask(){
+    return this.httpClient.get(`${CommonService.HOST}/task/fetch`);
   }
-  updateIncident(payloadBody : any ){
-    return this.httpClient.put(`${CommonService.HOST}/incident/update`,payloadBody);
-  }
-  fetchReporters(value:string){
-    if(!value || value.trim().length === 0) return;
-    return this.httpClient.get(`${CommonService.HOST}/reporter/search?prefix=${value}`);
-  }
-  forgotPassword(payload : any){
-    return this.httpClient.put(`${CommonService.HOST}/user/forgot-password`,payload);
+  updateTask(id:string,payload:any){
+    return this.httpClient.put(`${CommonService.HOST}/task/update/${id}`,payload);
   }
 } 

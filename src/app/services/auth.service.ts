@@ -16,4 +16,8 @@ export class AuthService {
     sessionStorage.removeItem("task-item");
     this.router.navigateByUrl('/login');
   }
+  getUserDetails(){
+    const user = sessionStorage.getItem("task-item");
+    return user ? JSON.parse(user) : null;
+  }
 }

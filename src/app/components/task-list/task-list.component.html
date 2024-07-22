@@ -23,18 +23,18 @@
                     <ng-container *ngFor="let x of t.tasks;index as j">
                         <div class="card" cdkDrag>
                             <h4>
-                               {{x.name}}  - {{i + " " + j}}
+                               {{x.title}}
                             </h4>
                             <p>
                                 Description : {{x.description}}
                             </p>
                             <p>
-                                Created At : {{x.createdAt}}
+                                Created At : {{x.createdAt | date: 'dd/MM/yyyy | h:mm a'}}
                             </p>
                             <div class="action-item-wrapper">
                                 <button class="btn-delete" type="button">Delete</button>
-                                <button class="btn-edit" type="button">Edit</button>
-                                <button class="btn-view" type="button">View Details</button>
+                                <button class="btn-edit" type="button" (click)="onEdit(x)">Edit</button>
+                                <button class="btn-view" type="button" (click)="activeTask = x;modalOpen=true;">View Details</button>
                             </div>
                         </div>
                     </ng-container>
@@ -50,21 +50,49 @@
 <div class="modal" [class.open]="modalOpen">
   <div class="edit-container">
     <h4 class="header">
-        Task Details | Edit Task
+        Task Details
     </h4>
     <div class="card-body">
-        <h6> Title : Task 3</h6>
+        <h6> Title : {{activeTask?.title}}</h6>
         <p>
-            Description : Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum, amet!
+            Description : {{activeTask?.description}}
         </p>
         <p>
-            createdAt : 07/08/2024 | 08:30 PM
+            createdAt : {{activeTask?.createdAt | date: 'dd/MM/yyyy | h:mm a'}}
         </p>
     </div>
     <div class="modal-action-item">
-        <button type="button" id="btnClose" (click)="onClose()">Close</button>
-        <button type="button" id="btnSave" (click)="onSave()">Save</button>
-        <button type="button" id="btnCancel" (click)="onCancel()">Cancel</button>
+        <button type="button" id="btnCancel" (click)="modalOpen=false;">Cancel</button>
     </div>
   </div>
 </div>
+
+
+<div class="modal" [class.open]="addModalOpen">
+    <div class="edit-container">
+      <h4 class="header">
+          Add Task
+      </h4>
+      <div class="card-body" [formGroup]="taskFormGroup">
+          <div class="form-control">
+            <label for="title"> Title : </label>
+            <input type="text" formControlName="title" id="title">
+            <div *ngIf="f['title'].invalid && (f['title'].dirty || f['title'].touched)" class="error">
+                <div *ngIf="f['title'].errors?.['required']">Title is required</div>
+            </div>
+          </div>
+          <div class="form-control">
+              <label for="description"> Description : </label>
+              <textarea formControlName="description" id="description" cols="30" rows="10"></textarea>
+              <div *ngIf="f['description'].invalid && (f['description'].dirty || f['description'].touched)" class="error">
+                  <div *ngIf="f['description'].errors?.['required']">Description is required</div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-action-item">
+          <button type="submit" id="btnSave" (click)="saveTaskDetails()">Save</button>
+          <button type="button" id="btnCancel" (click)="addModalOpen = false;">Cancel</button>
+      </div>
+    </div>
+</div>
+

@@ -10,26 +10,23 @@ import {
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { CommonService } from './common.service';
 import { LoaderService } from './loader.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class HttpInterceptorInterceptor implements HttpInterceptor {
 
-  constructor(private commonService : CommonService,private loaderService : LoaderService) {}
+  constructor(private authService : AuthService,private loaderService : LoaderService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    let loggedInUserId = this.commonService.getLoggedInUserId();
     this.loaderService.show();
-    if (!loggedInUserId) {
-      const items = sessionStorage.getItem("credentials");
-      if (items) {
-        loggedInUserId = JSON.parse(items).id;
-      }
-    }
+    
+    const user = this.authService.getUserDetails();
 
-    if (loggedInUserId) {
+    if (user) {
+      const {id} = user;
       const modifiedReq = request.clone({
         setHeaders: {
-          'userId' : `${loggedInUserId}`
+          'userId' : `${id}`
         },
       });
       return next.handle(modifiedReq).pipe(

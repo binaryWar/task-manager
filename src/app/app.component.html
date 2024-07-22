@@ -9,7 +9,7 @@
             <button type="button" routerLink="/signup" routerLinkActive="active">Signup</button>
         </ng-container>
         <ng-container *ngIf="showLogoutButton">
-            <button type="button" class="active">Logout</button>
+            <button type="button" class="active" (click)="logout()">Logout</button>
         </ng-container>
     </div>
   </div>
