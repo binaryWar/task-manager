@@ -13,6 +13,9 @@ export class TaskListComponent implements OnInit{
   addModalOpen : boolean = false;
   taskFormGroup!:FormGroup;
   activeTask:any;
+  row:number=-1;
+  
+  col:number=-1;
 
   taskList : {title:string, tasks: {id:string,title:string,description:string,createdAt:string}[]}[]= [
     {
@@ -86,8 +89,8 @@ export class TaskListComponent implements OnInit{
     if(this.activeTask){
       const {_id} = this.activeTask;
       const {title,description} = this.taskFormGroup.value;
-       
-      this.updateValue(_id,{title,description});
+
+      this.updateValue(_id,{title,description},this.row,this.col);
       return;
     }
     const {title,description} = this.taskFormGroup.value;
@@ -105,20 +108,37 @@ export class TaskListComponent implements OnInit{
     })
   }
 
-  onEdit(x:any){
+  onEdit(x:any,i:number,j:number){
     this.activeTask = x;
     this.addModalOpen = true;
     this.taskFormGroup.patchValue(x);
+    this.row = i;
+    this.col = j;
   }
-  private updateValue(id:string,payload:any){
+
+  private updateValue(id:string,payload:any,i:number,j:number){
     this.commonService.updateTask(id,payload).subscribe({
       next :(respose:any)=>{
+        if(i>-1 && j>-1) this.taskList[i].tasks[j] = respose;
+        
         this.addModalOpen = false;
         this.activeTask = null;
         this.taskFormGroup.reset();
+        this.row=-1;
+        this.col=-1;
       },error: (err:any)=>{
         alert("Some thing went wrong");
       } 
+    })
+  }
+  onDelete(x:any,i:number,j:number){
+    this.commonService.deleteTask(x._id).subscribe({
+      next : (response:any)=>{
+        this.taskList[i].tasks.splice(j,1);
+        alert("Delete SuccessFully");
+      },error :(err:any)=>{
+        alert("Some thing went wrong");
+      }
     })
   }
 }

@@ -37,4 +37,7 @@ export class CommonService {
   updateTask(id:string,payload:any){
     return this.httpClient.put(`${CommonService.HOST}/task/update/${id}`,payload);
   }
+  deleteTask(id:string){
+    return this.httpClient.delete(`${CommonService.HOST}/task/delete/${id}`);
+  }
 } 

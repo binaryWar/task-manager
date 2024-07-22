@@ -32,8 +32,8 @@
                                 Created At : {{x.createdAt | date: 'dd/MM/yyyy | h:mm a'}}
                             </p>
                             <div class="action-item-wrapper">
-                                <button class="btn-delete" type="button">Delete</button>
-                                <button class="btn-edit" type="button" (click)="onEdit(x)">Edit</button>
+                                <button class="btn-delete" type="button"(click)=onDelete(x,i,j)>Delete</button>
+                                <button class="btn-edit" type="button" (click)="onEdit(x,i,j)">Edit</button>
                                 <button class="btn-view" type="button" (click)="activeTask = x;modalOpen=true;">View Details</button>
                             </div>
                         </div>
