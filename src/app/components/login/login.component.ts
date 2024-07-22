@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
+import { GoogleAuthService } from 'src/app/services/google-auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit{
   showPassword : boolean = true;
   userLoginFormGroup!:FormGroup;
   
-  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router){}
+  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router,private googleAuthService : GoogleAuthService){}
 
   ngOnInit(): void {
       this.userLoginFormGroup = this.fb.group({
@@ -49,5 +50,9 @@ export class LoginComponent implements OnInit{
 
   goToSignUpPage(){
     this.router.navigate(['/signup']);
+  }
+
+  loginWithGoogle() {
+    this.googleAuthService.loginWithGoogle();
   }
 }

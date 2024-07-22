@@ -1,19 +1,20 @@
 <div class="container">
-    <div class="task-container">
-      <!-- <i class="fa-solid fa-book" aria-hidden="true"></i> -->
-      <img src="assets/img/to-do-list.png" alt="task-list" height="30px" width="30px">
-    </div>
-    <div class="login-wrapper">
-        <ng-container *ngIf="!showLogoutButton">
-            <button type="button" routerLink="/login" routerLinkActive="active">Login</button>
-            <button type="button" routerLink="/signup" routerLinkActive="active">Signup</button>
-        </ng-container>
-        <ng-container *ngIf="showLogoutButton">
-            <button type="button" class="active" (click)="logout()">Logout</button>
-        </ng-container>
-    </div>
+  <div class="task-container">
+    <!-- <i class="fa-solid fa-book" aria-hidden="true"></i> -->
+    <img src="assets/img/to-do-list.png" alt="task-list" height="30px" width="30px">
   </div>
-  <div class="scroll">
-    <router-outlet></router-outlet>
+  <div class="login-wrapper">
+      <ng-container *ngIf="!showLogoutButton">
+          <button type="button" routerLink="/login" routerLinkActive="active">Login</button>
+          <button type="button" routerLink="/signup" routerLinkActive="active">Signup</button>
+      </ng-container>
+      <ng-container *ngIf="showLogoutButton">
+          <button type="button" class="active" (click)="logout()">Logout</button>
+      </ng-container>
   </div>
+</div>
+<button (click)="logoutFromGoogle()">Logout button from the google </button>
+<div class="scroll">
+  <router-outlet></router-outlet>
+</div>
 <app-loader></app-loader>
