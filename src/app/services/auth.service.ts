@@ -9,15 +9,18 @@ export class AuthService {
   constructor(private router : Router) { }
 
   isAuthenticated() : boolean {
-    const items = sessionStorage.getItem("task-item");
+    const items = sessionStorage.getItem("task-token");
     return items ? true : false
   }
   logout(){
-    sessionStorage.removeItem("task-item");
+    sessionStorage.removeItem("task-token");
     this.router.navigateByUrl('/login');
   }
-  getUserDetails(){
-    const user = sessionStorage.getItem("task-item");
-    return user ? JSON.parse(user) : null;
+  getToken(){
+    const token = sessionStorage.getItem("task-token");
+    return token ? JSON.parse(token) : null;
+  }
+  setToken(token:string){
+    sessionStorage.setItem("task-token", JSON.stringify(token));  
   }
 }

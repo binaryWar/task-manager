@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
 import { AlertBoxComponent } from '../alertBox.component';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit{
   showPassword : boolean = true;
   userLoginFormGroup!:FormGroup;
   
-  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService){}
+  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService,private authService : AuthService){}
 
   ngOnInit(): void {
       this.userLoginFormGroup = this.fb.group({
@@ -32,22 +33,13 @@ export class LoginComponent implements OnInit{
     }
     this.commonService.login(this.userLoginFormGroup.value).subscribe({
       next : (data:any)=>{
-        const {id,emailAddress} = data;
-        this.handleSessionStorage(id,emailAddress);
+        const {token} = data;
+        this.authService.setToken(token);
         this.router.navigateByUrl('/tasks');
       },error : (err:any)=>{
         this.alertService.show(err.error.message || "Something went wrong");
       }
     })
-  }
-  private handleSessionStorage(id:string , emailAddress : string){
-    // this.commonService.setLoggedInUserId(id);
-    // this.commonService.setLoggedInUserEmailAddress(emailAddress);
-    const crednetials = {
-      id,
-      emailAddress
-    }
-    sessionStorage.setItem("task-item",JSON.stringify(crednetials));
   }
 
   goToSignUpPage(){

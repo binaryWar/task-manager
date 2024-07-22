@@ -19,7 +19,7 @@
         <ng-container *ngFor="let t of taskList;index as i">
             <div class="progress-container">
                 <h3 class="status">{{t.title}}</h3>
-                <div class="scroll-container" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="t.tasks">  
+                <div class="scroll-container" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="t.tasks" [attr.data-id]="t.title">  
                     <ng-container *ngFor="let x of t.tasks;index as j">
                         <div class="card" cdkDrag>
                             <h4>

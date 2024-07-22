@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class SignupComponent {
   userRegistrationForm!:FormGroup;
 
-  constructor(private formBuilder : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService){
+  constructor(private formBuilder : FormBuilder,private commonService : CommonService,private router : Router,private alertService : AlertService,private authService : AuthService){
     this.createForm();
   }
 
@@ -60,7 +61,7 @@ export class SignupComponent {
     this.commonService.registerUser(payload).subscribe({
       next : (response : any)=>{
         this.alertService.show(response.message);
-        this.saveCredentials(response);
+        this.authService.setToken(response.token);
         this.router.navigate(['/tasks']);
       },error : (err:any)=>{
         this.alertService.show(err?.error?.message || "some thing went wrong");
@@ -70,14 +71,5 @@ export class SignupComponent {
 
   clickOnLogin(){
     this.router.navigate(['/login']);
-  }
-
-  private saveCredentials(response : any){
-    const { emailAddress,id } = response;
-    const credentials = {
-      id,
-      emailAddress
-    }
-    sessionStorage.setItem("task-item", JSON.stringify(credentials));  
   }
 }

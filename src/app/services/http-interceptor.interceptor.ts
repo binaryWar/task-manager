@@ -20,13 +20,12 @@ export class HttpInterceptorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.loaderService.show();
     
-    const user = this.authService.getUserDetails();
+    const token = this.authService.getToken();
 
-    if (user) {
-      const {id} = user;
+    if (token) {
       const modifiedReq = request.clone({
         setHeaders: {
-          'userId' : `${id}`
+          'token' : `${token}`
         },
       });
       return next.handle(modifiedReq).pipe(

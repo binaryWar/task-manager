@@ -78,7 +78,7 @@
     margin-top: 1.5rem;
     border: 1px solid var(--primary-bg-color);
     padding: 10px;
-    height: 70vh;
+    max-height: 80%;
     overflow: hidden;
 }
 

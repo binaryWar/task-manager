@@ -17,7 +17,7 @@ export class TaskListComponent implements OnInit {
   activeTask: any;
   sortOrder: "recent" | "oldest" = "recent";
   private searchSubject: Subject<string> = new Subject<string>();
-  
+
   row: number = -1;
 
   col: number = -1;
@@ -37,7 +37,7 @@ export class TaskListComponent implements OnInit {
     }
 
   ]
-  constructor(private fb: FormBuilder, private commonService: CommonService,private alertService : AlertService) { };
+  constructor(private fb: FormBuilder, private commonService: CommonService, private alertService: AlertService) { };
 
   ngOnInit(): void {
     this.taskFormGroup = this.fb.group({
@@ -62,13 +62,26 @@ export class TaskListComponent implements OnInit {
   get f() { return this.taskFormGroup.controls; }
 
   drop(event: CdkDragDrop<any>): void {
-
+    const currentContainerId = event.container.element.nativeElement.getAttribute('data-id');
+    const id = event.previousContainer.data[0]._id;
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,
       event.previousIndex,
       event.currentIndex
     )
+    // const previousContainerId = event.previousContainer.element.nativeElement.getAttribute('data-id');
+    if (currentContainerId) this.updateTaskThroughCdk(id, currentContainerId);
+  }
+
+  private updateTaskThroughCdk(id: string, status: string) {
+    this.commonService.updateTask(id, { status }).subscribe({
+      next: (respose: any) => {
+        this.alertService.show("Staus updated");
+      }, error: (err: any) => {
+        this.alertService.show(err.error?.message || "Some thing went wrong");
+      }
+    })
   }
   private fetchTask() {
     this.commonService.fetchTask(this.sortOrder).subscribe({
@@ -94,7 +107,7 @@ export class TaskListComponent implements OnInit {
         title: 'Done',
         tasks: []
       }
-  
+
     ];
     tasks.forEach(task => {
       const { status } = task;
@@ -136,6 +149,7 @@ export class TaskListComponent implements OnInit {
       next: (response: any) => {
         this.addModalOpen = false;
         this.taskFormGroup.reset();
+        this.fetchTask();
         this.alertService.show(response.message || "Task Created");
       }, error: (err: any) => {
         this.alertService.show(err.error.message || "Something went wrong");
