@@ -18,3 +18,6 @@
 .logout-button:active {
     background-color: #d40017;
 }
+.scroll{
+    overflow-y: auto;
+}

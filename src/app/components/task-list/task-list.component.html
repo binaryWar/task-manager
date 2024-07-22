@@ -1,14 +1,14 @@
 <div class="work-container">
-    <button type="button">Add New Task</button>
+    <button type="button" (click)="addModalOpen=true;">Add New Task</button>
     <div class="wrapper">
         <div class="search-container">
-            <span>Search:</span><input type="text" id="Search-text">
+            <span>Search:</span><input type="text" id="Search-text" (input)="onSearch($event)">
         </div>
         <div class="sort-wrapper">
             <span>
                 Sort By
             </span>
-            <select id="sorting-select">
+            <select id="sorting-select" (change)="changeOrder($event)">
                 <option value="recent" selected>Recent</option>
                 <option value="oldest">Oldest</option>
             </select>

@@ -31,8 +31,8 @@ export class CommonService {
     return this.httpClient.post(`${CommonService.HOST}/task/create`,payload);
   }
 
-  fetchTask(){
-    return this.httpClient.get(`${CommonService.HOST}/task/fetch`);
+  fetchTask(sortOrder : string,searchString?:string){
+    return this.httpClient.get(`${CommonService.HOST}/task/fetch?orderby=${sortOrder}${searchString ? `&search=${searchString}` : ''}`);
   }
   updateTask(id:string,payload:any){
     return this.httpClient.put(`${CommonService.HOST}/task/update/${id}`,payload);

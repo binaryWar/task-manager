@@ -13,6 +13,8 @@ export class TaskListComponent implements OnInit{
   addModalOpen : boolean = false;
   taskFormGroup!:FormGroup;
   activeTask:any;
+  sortOrder : "recent" | "oldest" = "recent";
+
   row:number=-1;
   
   col:number=-1;
@@ -53,7 +55,7 @@ export class TaskListComponent implements OnInit{
     )
   }
   private fetchTask(){
-    this.commonService.fetchTask().subscribe({
+    this.commonService.fetchTask(this.sortOrder).subscribe({
       next : (response:any)=>{
         // console.log();
         this.groupByStatus(response.tasks || []);
@@ -101,6 +103,8 @@ export class TaskListComponent implements OnInit{
     }
     this.commonService.createTask(payload).subscribe({
       next : (response:any)=>{
+        this.addModalOpen = false;
+        this.taskFormGroup.reset();
         alert(response.message || "Task Created");
       },error : (err:any)=>{
         alert(err.message || "Something went wrong");
@@ -120,7 +124,7 @@ export class TaskListComponent implements OnInit{
     this.commonService.updateTask(id,payload).subscribe({
       next :(respose:any)=>{
         if(i>-1 && j>-1) this.taskList[i].tasks[j] = respose;
-        
+
         this.addModalOpen = false;
         this.activeTask = null;
         this.taskFormGroup.reset();
@@ -131,6 +135,7 @@ export class TaskListComponent implements OnInit{
       } 
     })
   }
+
   onDelete(x:any,i:number,j:number){
     this.commonService.deleteTask(x._id).subscribe({
       next : (response:any)=>{
@@ -140,5 +145,21 @@ export class TaskListComponent implements OnInit{
         alert("Some thing went wrong");
       }
     })
+  }
+
+  onSearch($event:any){
+
+    const flag = $event.target && $event.target.value.length > 3;
+    if(flag){
+      const value = $event.target.value;
+
+    }
+  }
+
+  changeOrder($event:any){
+    if(!$event) return ;
+    const value = $event.target.value;
+    this.sortOrder = value;
+    this.fetchTask()
   }
 }
