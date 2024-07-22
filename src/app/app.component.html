@@ -5,8 +5,8 @@
     </div>
     <div class="login-wrapper">
         <ng-container *ngIf="!showLogoutButton">
-            <button type="button" >Login</button>
-            <button type="button">Signup</button>
+            <button type="button" routerLink="/login" routerLinkActive="active">Login</button>
+            <button type="button" routerLink="/signup" routerLinkActive="active">Signup</button>
         </ng-container>
         <ng-container *ngIf="showLogoutButton">
             <button type="button" class="active">Logout</button>

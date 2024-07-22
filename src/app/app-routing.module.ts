@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { AuthGuard } from './services/auth.guard';
 import { TaskListComponent } from './components/task-list/task-list.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { authGuard } from './services/auth.guard';
 
 const routes: Routes = [
-  {path : "", component : LoginComponent , pathMatch : 'full'},
-  {path : "tasklist", component : TaskListComponent , pathMatch : 'full'},
-  {path : '**', component : LoginComponent}
+  {path : "login", component : LoginComponent , pathMatch : 'full', canActivate : [authGuard]},
+  {path : "signup", component : SignupComponent , pathMatch : 'full', canActivate : [authGuard]},
+  {path : "tasks", component : TaskListComponent , pathMatch : 'full', canActivate : [authGuard]},
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' }
 
 ];
 

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -9,16 +10,14 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class SignupComponent {
   userRegistrationForm!:FormGroup;
-  @Output() loginClick : EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private formBuilder : FormBuilder,private commonService : CommonService){
+  constructor(private formBuilder : FormBuilder,private commonService : CommonService,private router : Router){
     this.createForm();
   }
 
   private createForm(): void {
     
     this.userRegistrationForm = this.formBuilder.group({
-      userType: ['', Validators.required],
       firstName: ['', [Validators.required, Validators.maxLength(15)]],
       lastName: ['', [Validators.required, Validators.maxLength(15)]],
       emailAddress: ['', [Validators.required, Validators.email]],
@@ -43,19 +42,41 @@ export class SignupComponent {
 
   onSubmit(){
     if(this.userRegistrationForm.invalid){
-      alert("Fill all mandatory fields to contine");
+      if(this.userRegistrationForm.errors?.['passwordMismatch']){
+        alert("Password and confirm password is not matching")
+        return;
+      }
+      alert("Fill all mandatory fields to continue");
       return;
     }
-    const payloadBody = this.userRegistrationForm.value;
-    this.commonService.registerUser(payloadBody).subscribe({
+    const {firstName,lastName,emailAddress,password } = this.userRegistrationForm.value;
+    const payload = {
+      firstName,
+      lastName,
+      emailAddress,
+      password
+    }
+    this.commonService.registerUser(payload).subscribe({
       next : (response : any)=>{
-        alert("Creation success");
+        alert(response.message);
+        this.saveCredentials(response);
+        this.router.navigate(['/tasks']);
       },error : (err:any)=>{
         alert("some thing went wrong");
       }
     })
   }
+
   clickOnLogin(){
-    this.loginClick.emit("loginBtn")
+    this.router.navigate(['/login']);
+  }
+
+  private saveCredentials(response : any){
+    const { emailAddress,id } = response;
+    const credentials = {
+      id,
+      emailAddress
+    }
+    sessionStorage.setItem("task-item", JSON.stringify(credentials));  
   }
 }

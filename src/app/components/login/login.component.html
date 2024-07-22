@@ -1,6 +1,6 @@
 <!-- login.component.html -->
 
-<div class="login-container" *ngIf="activeBtn == 'loginBtn'">
+<div class="login-container">
     <h1 class="login-title">Login</h1>
     <div class="login-form" [formGroup]="userLoginFormGroup" (ngSubmit)="onLogin()">
       <form>
@@ -14,7 +14,7 @@
         </div>
         <button type="submit" class="loginButton">Login</button>
         <div class="signup-container">
-          Don't have an account? <span>Signup </span> 
+          Don't have an account? <span (click)="goToSignUpPage()">Signup </span> 
         </div>
         <div class="google-login-container">
           <button type="button">
@@ -24,4 +24,3 @@
       </form>
     </div>
 </div>
-<app-signup *ngIf="activeBtn == 'signupBtn'" (loginClick)="setButtonValue($event)"></app-signup>

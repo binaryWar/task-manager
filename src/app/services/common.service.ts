@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { environment } from 'src/assets/environment/environment';
 
-const host = "http://localhost:3000/api/v1"
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
   private loggedInUserId: string | undefined;
   private emailAddress : string | undefined;
+  private static HOST = environment.API_ENDPOINT;
   constructor(private httpClient : HttpClient) { }
   
   setLoggedInUserId(userId: string) {
@@ -25,45 +26,28 @@ export class CommonService {
     return this.emailAddress;
   }
 
-  getCityAndState(pincode: string): Observable<{ city: string, state: string }> {
-    return this.httpClient.get<any>(`${host}/pincode/${pincode}`)
-      .pipe(
-        map(response => {
-          if (response.Status === "Success" && response.PostOffice.length > 0) {
-            return {
-              city: response.PostOffice[0].District,
-              state: response.PostOffice[0].State,
-              country : response.PostOffice[0].Country
-            };
-          } else {
-            throw new Error('Invalid pincode or no data available');
-          }
-        })
-      );
-  }
-  
-  registerUser(payload : any){
-    return this.httpClient.post(`${host}/user/register`,payload);
+  registerUser(payload : {firstName :string , lastName : string, emailAddress : string , password  : string}){
+    return this.httpClient.post(`${CommonService.HOST}/user/registerUser`,payload);
   }
 
   login(payload : any){
-    return this.httpClient.post(`${host}/user/login`,payload);
+    return this.httpClient.post(`${CommonService.HOST}/user/login`,payload);
   } 
   
   createIncident(payload : any){
-    return this.httpClient.post(`${host}/incident/create`,payload);
+    return this.httpClient.post(`${CommonService.HOST}/incident/create`,payload);
   }
   fetchUserIncidents(){
-    return this.httpClient.get(`${host}/incident/fetch`);
+    return this.httpClient.get(`${CommonService.HOST}/incident/fetch`);
   }
   updateIncident(payloadBody : any ){
-    return this.httpClient.put(`${host}/incident/update`,payloadBody);
+    return this.httpClient.put(`${CommonService.HOST}/incident/update`,payloadBody);
   }
   fetchReporters(value:string){
     if(!value || value.trim().length === 0) return;
-    return this.httpClient.get(`${host}/reporter/search?prefix=${value}`);
+    return this.httpClient.get(`${CommonService.HOST}/reporter/search?prefix=${value}`);
   }
   forgotPassword(payload : any){
-    return this.httpClient.put(`${host}/user/forgot-password`,payload);
+    return this.httpClient.put(`${CommonService.HOST}/user/forgot-password`,payload);
   }
 } 

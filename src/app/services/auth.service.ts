@@ -9,11 +9,11 @@ export class AuthService {
   constructor(private router : Router) { }
 
   isAuthenticated() : boolean {
-    const items = sessionStorage.getItem("credentials");
+    const items = sessionStorage.getItem("task-item");
     return items ? true : false
   }
   logout(){
-    sessionStorage.removeItem("credentials");
-    this.router.navigate(['/']);
+    sessionStorage.removeItem("task-item");
+    this.router.navigateByUrl('/login');
   }
 }

@@ -12,7 +12,6 @@ export class LoaderComponent {
   constructor(private loaderService: LoaderService) {
     this.loaderService.isLoading.subscribe((flag:boolean)=>{
       this.isLoading = flag
-      console.log(flag + " ================= ")
     });
   }
 }

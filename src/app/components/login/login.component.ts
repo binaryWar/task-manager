@@ -9,25 +9,19 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit{
-  activeBtn : string = "signupBtn";
+
   showPassword : boolean = true;
   userLoginFormGroup!:FormGroup;
   
-  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router){
+  constructor(private fb : FormBuilder,private commonService : CommonService,private router : Router){}
 
-  }
   ngOnInit(): void {
       this.userLoginFormGroup = this.fb.group({
         emailAddress : [,[Validators.required,Validators.email]],
         password : [,[Validators.required]]
       });
   }
-  onSignUpClick(event:any){ 
-    this.activeBtn = "signupBtn";
-  }
-  onLoginClick(event:any){
-    this.activeBtn = "loginBtn";
-  }
+
   onLogin(){
     if(this.userLoginFormGroup.invalid){
       alert("Fill the details");
@@ -35,24 +29,25 @@ export class LoginComponent implements OnInit{
     }
     this.commonService.login(this.userLoginFormGroup.value).subscribe({
       next : (data:any)=>{
-        const {httpStatusCode,id,emailAddress} = data;
+        const {id,emailAddress} = data;
         this.handleSessionStorage(id,emailAddress);
-        this.router.navigate(['/incident'])
+        this.router.navigateByUrl('/tasks');
       },error : (err:any)=>{
         alert("Invalid credentials");
       }
     })
   }
   private handleSessionStorage(id:string , emailAddress : string){
-    this.commonService.setLoggedInUserId(id);
-    this.commonService.setLoggedInUserEmailAddress(emailAddress);
+    // this.commonService.setLoggedInUserId(id);
+    // this.commonService.setLoggedInUserEmailAddress(emailAddress);
     const crednetials = {
       id,
       emailAddress
     }
-    sessionStorage.setItem("credentials",JSON.stringify(crednetials));
+    sessionStorage.setItem("task-item",JSON.stringify(crednetials));
   }
-  setButtonValue(event:string){
-    this.activeBtn = event;
+
+  goToSignUpPage(){
+    this.router.navigate(['/signup']);
   }
 }
