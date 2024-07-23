@@ -12,6 +12,8 @@ export class AppComponent implements OnInit{
   
   showLogoutButton : boolean = false;
   user : any = null;
+  showList:boolean = false;
+
   constructor(private authSer : AuthService,private router : Router,private cdr: ChangeDetectorRef){}
   
   ngOnInit(): void {

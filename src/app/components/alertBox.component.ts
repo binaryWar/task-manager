@@ -22,6 +22,7 @@ import { AlertService } from '../services/alert.service'; // Import your service
         border-radius: 5px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         z-index: 1000;
+        min-width : 300px;
       }
   
       .alert-content {
