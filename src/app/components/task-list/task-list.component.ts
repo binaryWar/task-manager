@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, debounceTime, switchMap } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -37,7 +38,7 @@ export class TaskListComponent implements OnInit {
     }
 
   ]
-  constructor(private fb: FormBuilder, private commonService: CommonService, private alertService: AlertService) { };
+  constructor(private fb: FormBuilder, private commonService: CommonService, private alertService: AlertService,private authService : AuthService) { };
 
   ngOnInit(): void {
     this.taskFormGroup = this.fb.group({
@@ -45,7 +46,8 @@ export class TaskListComponent implements OnInit {
       description: [, Validators.required]
     });
     this.fetchTask();
-
+    const token = this.authService.getToken();
+    this.authService.setUserDetails(token);
     this.searchSubject.pipe(
       debounceTime(300), // Adjust the debounce time as needed
       switchMap(value => this.commonService.fetchTask(this.sortOrder, value))

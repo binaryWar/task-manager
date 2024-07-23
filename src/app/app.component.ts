@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title = 'incident-management';
   showLogoutButton : boolean = false;
-  constructor(private authSer : AuthService,private router : Router){}
+  user : any = null;
+  constructor(private authSer : AuthService,private router : Router,private cdr: ChangeDetectorRef){}
   
   ngOnInit(): void {
     this.router.events.subscribe(event => {
@@ -18,6 +20,14 @@ export class AppComponent implements OnInit{
         this.showLogoutButton = event.url === '/tasks';
       }
     });
+    this.authSer.getUserDetails().pipe(
+      filter(data=>!!data)
+    ).subscribe((data:any)=>{
+      if(data){
+        this.user = data;
+        this.cdr.detectChanges();
+      }
+    })
   }
   
   logout(){

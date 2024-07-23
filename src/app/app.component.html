@@ -9,6 +9,7 @@
             <button type="button" routerLink="/signup" routerLinkActive="active">Signup</button>
         </ng-container>
         <ng-container *ngIf="showLogoutButton">
+            <span class="user-name">{{user ? 'Hello!! ' : ''}}{{user?.firstName}}&nbsp;{{user?.lastName}}</span>
             <button type="button" class="active" (click)="logout()">Logout</button>
         </ng-container>
     </div>

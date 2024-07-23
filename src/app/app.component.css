@@ -21,3 +21,8 @@
 .scroll{
     overflow-y: auto;
 }
+.user-name{
+    color: #fff;
+    font-size: 16px;
+    margin: auto 5px;
+}
