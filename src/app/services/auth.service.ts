@@ -39,7 +39,7 @@ export class AuthService {
       console.log(Error);
     }
   }
-  verifyGoogleToken(payload : {idToken :string,provider : string}){
+  verifyGoogleToken(payload : {idToken :string,provider : string,firstName : string, lastName : string | null | undefined}){
     return this.httpClient.post(`${environment.API_ENDPOINT}/google/auth/verifyToken`,payload);
   }
 }

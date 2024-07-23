@@ -49,9 +49,11 @@ export class LoginComponent implements OnInit{
     this.socialAuthService.authState.pipe(
       filter(result=>!!result)
     ).subscribe(result=>{
-      const {idToken,provider} = result;
+      const {idToken,provider,firstName,lastName} = result;
       const payload = {
         idToken,
+        firstName,
+        lastName,
         provider
       } 
       this.verifyToken(payload);
@@ -62,7 +64,7 @@ export class LoginComponent implements OnInit{
     this.router.navigate(['/signup']);
   }
 
-  private verifyToken(payload : {idToken :string,provider : string}){
+  private verifyToken(payload : {idToken :string,provider : string,firstName : string, lastName : string | null | undefined}){
     this.authService.verifyGoogleToken(payload).subscribe({
       next : (response:any)=>{
         const {token} = response;
