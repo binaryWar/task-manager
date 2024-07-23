@@ -61,7 +61,10 @@ input:-webkit-autofill:active {
 }
 
 .google-login-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .google-login-container button {
@@ -78,7 +81,9 @@ input:-webkit-autofill:active {
 .google-login-container span {
     font-weight: 600;
 }
-
+.google-login-container iframe{
+    margin: 5px auto;
+}
 .cdk-drop-list-dragging .cdk-drag {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
