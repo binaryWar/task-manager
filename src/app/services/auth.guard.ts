@@ -23,29 +23,4 @@ export const authGuard: CanActivateFn = (route, state) => {
         return false;
       }
   }
-  if (authService.isAuthenticated()) {
-    return true;
-  } else {
-    router.navigate(['/login']);
-    return false;
-  }
 };
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AuthGuard implements CanActivate {
-
-//   constructor(private authService: AuthService, private router: Router) {}
-
-//   canActivate(): boolean {
-//     if (this.authService.isAuthenticated()) {
-//       return true;
-//     } else {
-//       if(this.authService.isAuthenticated()){
-//         this.router.navigate(['/incident']);
-//       }else this.router.navigate(['/']); 
-//       return false;
-//     }
-//   }
-// }

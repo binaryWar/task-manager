@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  title = 'incident-management';
+  
   showLogoutButton : boolean = false;
   user : any = null;
   constructor(private authSer : AuthService,private router : Router,private cdr: ChangeDetectorRef){}
