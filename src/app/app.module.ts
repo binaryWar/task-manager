@@ -12,7 +12,11 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import {CdkDrag, CdkDropList, DragDropModule} from '@angular/cdk/drag-drop';
 import { AlertService } from './services/alert.service';
 import { AlertBoxComponent } from './components/alertBox.component';
-
+import { SocialLoginModule, SocialAuthServiceConfig, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from '@abacritt/angularx-social-login';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,10 +33,33 @@ import { AlertBoxComponent } from './components/alertBox.component';
     HttpClientModule,
     DragDropModule,
     CdkDrag,
-    CdkDropList
+    CdkDropList,
+    SocialLoginModule,
+    GoogleSigninButtonModule
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS, useClass : HttpInterceptorInterceptor, multi:true},
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        lang: 'en',
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '598027431043-ufr8mpvkoi25qkt9hnkvq17rvr4b3dhg.apps.googleusercontent.com',
+              {
+                oneTapEnabled : false,
+                prompt : "consent"
+              })
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    },
     AlertService
   ],
   bootstrap: [AppComponent]

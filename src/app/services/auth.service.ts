@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import {jwtDecode} from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/assets/environment/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router : Router) { }
+  constructor(private router : Router,private httpClient : HttpClient) { }
   private userDetails$ : Subject<any> = new Subject<any>();
 
   isAuthenticated() : boolean {
@@ -36,5 +38,8 @@ export class AuthService {
     } catch (Error) {
       console.log(Error);
     }
+  }
+  verifyGoogleToken(payload : {idToken :string,provider : string}){
+    return this.httpClient.post(`${environment.API_ENDPOINT}/google/auth/verifyToken`,payload);
   }
 }
